@@ -6,7 +6,7 @@
     ami_id: ami-0055977a6e828a4f4
     domain_name: raws88s.online
     env: dev
-    action: create
+    actions: create
     instances:
     - mongodb
     - catalogue
@@ -24,12 +24,12 @@
         Name: "{{ item }}-{{ env }}"
     loop: "{{ instances }}"
     register: ec2_output
-    when: action == "create"
+    when: actions == "create"
 
   - name: print the output
     ansible.builtin.debug:
       msg: "{{ ec2_output }}"
-    when: action == "create"
+    when: actions == "create"
 
   - name: create route53 records
     amazon.aws.route53:
@@ -41,7 +41,7 @@
      value: "{{ item.instances[0].private_ip_address }}"
      wait: true
     loop: "{{ec2_output.results}}"
-    when: action == "create"
+    when: actions == "create"
 
   - name: delete r53 records for frontend
     amazon.aws.route53:
@@ -53,7 +53,7 @@
     loop: "{{ instances }}"
     when:  # and
     - item == "frontend"
-    - action == "destroy"
+    - actions == "destroy"
 
   - name: delete r53 records
     amazon.aws.route53:
@@ -63,7 +63,7 @@
       type: A
       ttl: 1
     loop: "{{ instances }}"
-    when: action == "destroy"
+    when: actions == "destroy"
 
   - name: delete ec2 instance
     amazon.aws.ec2_instance:
@@ -71,4 +71,4 @@
       name: "{{ item }}-{{ env }}"
       wait: false
     loop: "{{ instances }}"
-    when: action == "destroy"
+    when: actions == "destroy"
