@@ -30,13 +30,13 @@
 
   - name: creater53 records
     amazon.aws.route53:
-    state: present
-    zone: "{{ domain_name }}"
-    record: "{{item.item}}-{{ env }}.{{ domain_name }}"
-    type: A
-    ttl: 1
-    value: "{{ item.instance[0].private_ip_address }}"
-    wait: true
-  loop: "{{ec2_output}}"
+     state: present
+     zone: "{{ domain_name }}"
+     record: "{{item.item}}-{{ env }}.{{ domain_name }}"
+     type: A
+     ttl: 1
+     value: "{{ item.instance[0].private_ip_address }}"
+     wait: true
+    loop: "{{ec2_output}}"
 
   
