@@ -58,8 +58,8 @@
     - item.item == "frontend"
     - action == "create"
 
-# - name: delete ec2instance
-#   ansible.builtin.ec2_instance:
-#    state: absent
-#    name: "{{ item}}-{{env}}"
-#   loop: {{ instances }}
+- name: delete ec2instance
+  ansible.builtin.ec2_instance:
+   state: absent
+   name: "{{ item}}-{{env}}"
+  loop: {{ instances }}
