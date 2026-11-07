@@ -4,7 +4,7 @@
   vars:
     sg_id: sg-0eecd105120308fa3
     ami_id: ami-0055977a6e828a4f4
-    domain_name: daws88s.online
+    domain_name: raws88s.online
     env: dev
     instances:
     - mongodb
@@ -28,6 +28,15 @@
     ansible.builtin.debug:
       msg: "{{ ec2_output }}"
 
-
+  - name: creater53 records
+    amazon.aws.route53:
+    state: present
+    zone: "{{ domain_name }}"
+    record: "{{item.item}}-{{ env }}.{{ domain_name }}"
+    type: A
+    ttl: 1
+    value: "{{ item.instance[0].private_ip_address }}"
+    wait: true
+  loop: "{{ec2_output}}"
 
   
