@@ -34,23 +34,25 @@
       url: https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip 
       dest: /tmp/catalogue.zip
     
-  - name: Unarchive catalogue
+  - name: unarchive catalogue
     ansible.builtin.unarchive:
       src: /tmp/catalogue.zip
       dest: /app
       remote_src: yes
 
-  - name: Install dependencies
+  - name: install dependencies
     community.general.npm:
       path: /app
   
   - name: copy catalogue service
     ansible.builtin.copy:
       src: catalogue.service
-      est: /etc/systemd/system/catalogue.service
+      dest: /etc/systemd/system/catalogue.service
   
   - name: copy mongo repo
     ansible.builtin.copy:
+      src: mongo.repo
+      dest: /etc/yum.repos.d/mongo.repo
 
   - name: install mongodb client
     ansible.builtin.dnf: 
@@ -58,11 +60,11 @@
       state: present
       
   - name: check products loaded
-    ansible.builtin.command: mongosh --host "{{ MONGODB_HOST }}" --quiet  --eval 'db.getMongo().getDBNames().indexOf("catalogue")'
+    ansible.builtin.shell: mongosh --host "{{ MONGODB_HOST }}" --quiet  --eval 'db.getMongo().getDBNames().indexOf("catalogue")'
     register: catalogue_output
   
   - name: print the output
-    ansible.builtin.print:
+    ansible.builtin.debug:
       msg: "{{ catalogue_output }}"
 
   - name: load the data
@@ -70,5 +72,6 @@
   
   - name: start and enable catalogue
     ansible.builtin.service:
+      name: catalogue
       state: restarted
       enabled: yes
