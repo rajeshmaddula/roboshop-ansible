@@ -1,5 +1,5 @@
-- name: configure cart server
-  hosts: cart
+- name: configure user server
+  hosts: user
   become: yes
   tasks:
 
@@ -29,19 +29,19 @@
       path: /app 
       state: directory
     
-  - name: delete cart zip file
+  - name: delete user zip file
     ansible.builtin.file:
-      path: /tmp/cart.zip
+      path: /tmp/user.zip
       state: absent
     
-  - name: download cart
+  - name: download user
     ansible.builtin.get_url:
-      url: https://roboshop-artifacts.s3.amazonaws.com/cart-v3.zip 
-      dest: /tmp/cart.zip
+      url: https://roboshop-artifacts.s3.amazonaws.com/user-v3.zip 
+      dest: /tmp/user.zip
     
-  - name: unarchive cart
+  - name: unarchive user
     ansible.builtin.unarchive:
-      src: /tmp/cart.zip
+      src: /tmp/user.zip
       dest: /app
       remote_src: yes
 
@@ -49,17 +49,17 @@
     community.general.npm:
       path: /app
   
-  - name: copy cart service
+  - name: copy user service
     ansible.builtin.template:
-      src: cart.service
-      dest: /etc/systemd/system/cart.service
+      src: user.service
+      dest: /etc/systemd/system/user.service
 
   - name: daemon_reload
     ansible.builtin.systemd_service:
       daemon_reload: true
       
-  - name: start and enable cart
+  - name: start and enable user
     ansible.builtin.service:
-      name: cart
+      name: user
       state: restarted
       enabled: yes
