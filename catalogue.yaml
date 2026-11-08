@@ -40,3 +40,12 @@
      dest: /app
      remote_src: yes
 
+  - name: Install dependencies
+    community.general.npm:
+    path: /app
+  
+  - name: copy catalogue service
+    ansible.builtin.copy:
+    src: catalogue.service
+    dest: /etc/systemd/system/catalogue.service
+
