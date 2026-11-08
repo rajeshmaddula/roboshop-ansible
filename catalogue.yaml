@@ -68,7 +68,7 @@
       msg: "{{ catalogue_output }}"
 
   - name: load the data
-    ansible.builtin.command: mongosh --host "{{ MONGODB_HOST }}" </app/db/master-data.js
+    ansible.builtin.shell: mongosh --host "{{ MONGODB_HOST }}" </app/db/master-data.js
   
   - name: start and enable catalogue
     ansible.builtin.service:
