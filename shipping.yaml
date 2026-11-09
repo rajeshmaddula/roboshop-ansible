@@ -64,7 +64,7 @@
       daemon_reload: true
   
   - name: import shipping data
-    community.mysql/mysql_db:
+    community.mysql.mysql_db:
       state: import
       name: all
       login_host: "{{ MYSQL_HOST }}"
