@@ -75,7 +75,7 @@
 
   - name: Import shipping data
     community.mysql.mysql_db:
-      name: "{{ mysql_database }}"
+      name: all
       state: import
       target: "{{ item }}"
       login_host: "{{ MYSQL_HOST }}"
