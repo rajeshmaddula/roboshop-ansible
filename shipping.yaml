@@ -63,18 +63,28 @@
     ansible.builtin.systemd_service:
       daemon_reload: true
   
-  - name: import shipping data
+  - name: Install Python pip
+    ansible.builtin.dnf:
+      name: python3-pip
+      state: present
+
+  - name: Install PyMySQL
+    ansible.builtin.pip:
+      name: PyMySQL
+      executable: pip3
+
+  - name: Import shipping data
     community.mysql.mysql_db:
+      name: "{{ mysql_database }}"
       state: import
-      name: all
+      target: "{{ item }}"
       login_host: "{{ MYSQL_HOST }}"
       login_user: root
-      login_password: RoboShop@1
-      target: "{{ item }}" 
+      login_password: "{{ MYSQL_ROOT_PASSWORD }}"
     loop:
-    - /app/db/schema.sql
-    - /app/db/app-user.sql 
-    - /app/db/master-data.sql
+      - /app/db/schema.sql
+      - /app/db/app-user.sql
+      - /app/db/master-data.sql
 
   - name: start shipping
     ansible.builtin.service:
