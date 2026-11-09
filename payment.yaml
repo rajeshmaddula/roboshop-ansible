@@ -2,10 +2,9 @@
   hosts: payment
   become: yes
   tasks:
-
   - name: install Python
     ansible.builtin.dnf:
-      name: {{ item }}
+      name: "{{ item }}""
       state: present
     loop:
     - python3
