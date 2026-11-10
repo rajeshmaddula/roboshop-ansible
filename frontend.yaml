@@ -13,7 +13,7 @@
   - name: start and enable nginx
     ansible.builtin.service:
       name: nginx
-      state: present
+      state: started
       enabled: yes
   
   - name: Remove the entire directory
