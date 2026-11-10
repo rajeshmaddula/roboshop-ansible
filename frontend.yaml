@@ -47,7 +47,7 @@
       src: nginx.conf
       dest: /etc/nginx/nginx.conf
   
-  - name: start frontend
+  - name: resatrt nginx
     ansible.builtin.service:
       name: nginx
       state: restarted
