@@ -52,6 +52,10 @@
     ansible.builtin.copy:
       src: catalogue.service
       dest: /etc/systemd/system/catalogue.service
+  
+  - name: daemon reload
+    ansible.builtin.systemd_service:
+      daemon_reload: true
 
   - name: copy mongo repo
     ansible.builtin.copy:
